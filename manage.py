@@ -1,11 +1,9 @@
 from flask_script import Manager, Server
-from run import app
-from models import Todo
-
+from flask_migrate import Migrate, MigrateCommand
+from run import app, db
+migrate = Migrate(app, db)
 manager = Manager(app)
-manager.add_command('runserver', Server())
-@manager.shell
-def make_shell_context():
-	return dict(app=app, Todo=Todo)
+manager.add_command('db', MigrateCommand)
+
 if __name__ == '__main__':
-	manager.run()
+    manager.run()
